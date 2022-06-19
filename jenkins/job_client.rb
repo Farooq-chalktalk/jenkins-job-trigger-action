@@ -105,7 +105,13 @@ module Jenkins
         end
       end
       if build_result == 'SUCCESS'
-          puts 'DDL validation with SUCCESS status!'
+          begin
+            puts 'DDL validation with SUCCESS status!'
+            log_response = perform_request(job_log_url, :get)
+            puts log_response.body.force_encoding('utf-8')
+          rescue
+            puts 'Couldn\'t retrieve log messages.'
+          end
       elsif timeout_countdown == 0
           fail!("JOB FOLLOW TIMED OUT (After #{job_timeout} seconds)")
       else
